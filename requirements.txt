@@ -1,0 +1,2 @@
+# Both experiments share the same Python dependencies. Install torch first (see README).
+-r experiments/movielens/requirements-pipeline.txt
