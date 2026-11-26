@@ -199,7 +199,6 @@ python -X utf8 tests/smoke_e2e.py --workdir "$env:TEMP/movielens-smoke-$([guid]:
 - Results cover two domains and 30-core-filtered interactions, not all recommendation settings or strict cold-start scenarios.
 - LLM-derived intent is an estimate rather than observed ground-truth intent and is subject to API cost, response variability, and generic-intent noise.
 - Accuracy, long-tail performance and coverage do not always improve together. Further validation of user-specific effects is needed.
-- This repository releases code and reproduction instructions, not raw data, credentials, caches, user-level evaluation files or frozen input bundles. Original development records and detailed results are maintained separately; exact agreement with historical metrics is not guaranteed using the public code alone. Review dataset terms and external API policies before running the experiments.
 
 ## 9. Resources and provenance
 
@@ -208,5 +207,3 @@ python -X utf8 tests/smoke_e2e.py --workdir "$env:TEMP/movielens-smoke-$([guid]:
 - [RecBole](https://github.com/RUCAIBox/RecBole)
 - [LightGCN](https://arxiv.org/abs/2002.02126)
 - [all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
-
-Original code snapshots: Goodreads `ef1d2d7d7e3b7c7c65963b0e4ee6964a08ac5cf0`; MovieLens `10ecfee14f7a9c809bfa21de7b9a2e8d5e63c819`. The unified runner connects data verification to report generation and moves cost confirmation ahead of the API connectivity request. Original dataset and third-party code terms apply.
