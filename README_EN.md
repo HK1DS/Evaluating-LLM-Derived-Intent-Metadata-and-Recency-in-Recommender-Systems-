@@ -258,3 +258,13 @@ python -X utf8 tests/smoke_e2e.py --workdir "$env:TEMP/movielens-smoke-$([guid]:
 - [RecBole](https://github.com/RUCAIBox/RecBole)
 - [LightGCN](https://arxiv.org/abs/2002.02126)
 - [all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
+
+## 10. License and citation
+
+- **Software:** Original project source code and software documentation without a separate license are available under the [MIT License](LICENSE). The existing [Apache License 2.0](experiments/goodreads/LICENSE) applies within `experiments/goodreads/`; existing third-party licenses, copyright and attribution notices remain in effect.
+- **Research report and poster:** The two PDF research documents are excluded from the MIT license. All rights are reserved by their respective copyright holders, subject to uses permitted by applicable copyright law, including lawful quotation.
+- **Data and external dependencies:** [MovieLens 25M](https://grouplens.org/datasets/movielens/25m/) and [Goodreads Children](https://cseweb.ucsd.edu/~jmcauley/datasets/goodreads.html) remain subject to their original providers' terms. External libraries, models, APIs, and their outputs are subject to their respective terms. The repository's MIT license does not alter those rights.
+
+If you use this software or research, please cite the project using [CITATION.cff](CITATION.cff) or GitHub's “Cite this repository” feature.
+
+> Kim, J.-U., & Yoo, E.-S. (2026). *Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems*. Graduation research project, Department of Data Science, Hanyang University.

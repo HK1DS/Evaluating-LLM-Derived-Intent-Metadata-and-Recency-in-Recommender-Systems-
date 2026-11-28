@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software or research in your work, please cite this project."
+title: "Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems"
+type: software
+authors:
+  - family-names: Kim
+    given-names: Jin-Uk
+    affiliation: "Department of Data Science, Hanyang University"
+  - family-names: Yoo
+    given-names: Eun-seon
+    affiliation: "Department of Data Science, Hanyang University"
+repository-code: "https://github.com/HK1DS/Evaluating-LLM-Derived-Intent-Metadata-and-Recency-in-Recommender-Systems"
+url: "https://github.com/HK1DS/Evaluating-LLM-Derived-Intent-Metadata-and-Recency-in-Recommender-Systems"
+keywords:
+  - recommender systems
+  - collaborative filtering
+  - recency
+  - knowledge graphs
+  - large language models
+  - long-tail recommendation

@@ -259,3 +259,13 @@ python -X utf8 tests/smoke_e2e.py --workdir "$env:TEMP/movielens-smoke-$([guid]:
 - [RecBole](https://github.com/RUCAIBox/RecBole)
 - [LightGCN](https://arxiv.org/abs/2002.02126)
 - [all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
+
+## 10. 라이선스 및 인용
+
+- **소프트웨어:** 별도의 라이선스가 명시되지 않은 본 프로젝트의 자체 소스 코드 및 소프트웨어 문서는 [MIT License](LICENSE)를 따른다. `experiments/goodreads/`에는 기존 [Apache License 2.0](experiments/goodreads/LICENSE)이 적용되며, 기존 제3자 라이선스 및 저작권·출처 표시는 그대로 유지된다.
+- **연구 보고서 및 포스터:** 저장소의 두 PDF는 MIT 라이선스 적용 대상이 아니며, 해당 저작권자에게 모든 권리가 유보된다. 저작권법상 허용되는 인용 등은 가능하다.
+- **데이터 및 외부 의존성:** [MovieLens 25M](https://grouplens.org/datasets/movielens/25m/) 및 [Goodreads Children](https://cseweb.ucsd.edu/~jmcauley/datasets/goodreads.html)은 원본 배포자의 이용 조건을 따른다. 외부 라이브러리, 모델, API 및 그 산출물에도 각자의 이용 조건이 적용된다. 본 저장소의 MIT 라이선스가 이러한 권리를 변경하지 않는다.
+
+본 소프트웨어나 연구를 활용하는 경우 [CITATION.cff](CITATION.cff) 또는 GitHub의 “Cite this repository”를 참고하여 인용해 주기 바란다.
+
+> Kim, J.-U., & Yoo, E.-S. (2026). *Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems*. Graduation research project, Department of Data Science, Hanyang University.
