@@ -6,7 +6,7 @@
 
 `Python 3.11` · `PyTorch` · `RecBole` · `LLM / RAG` · `Knowledge Graph`
 
-Graduation research project, Department of Data Science, Hanyang University (2026) — Jin-Uk Kim and Eun-seon Yu; project advisor: Hyun-Joon Kim.
+Graduation research project, Department of Data Science, Hanyang University (2026) — Jin-Uk Kim and EunSeon Yu; project advisor: HyunJoon Kim.
 
 We evaluate recency, item metadata, and LLM-derived intent as auxiliary signals for collaborative filtering (CF) on MovieLens 25M and Goodreads Children. **The proposed model is MF + Recency, which reuses the existing MF item embeddings and introduces just one trainable scalar.** Metadata and LLM intent are evaluated separately through ablations.
 
@@ -267,4 +267,4 @@ python -X utf8 tests/smoke_e2e.py --workdir "$env:TEMP/movielens-smoke-$([guid]:
 
 If you use this software or research, please cite the project using [CITATION.cff](CITATION.cff) or GitHub's “Cite this repository” feature.
 
-> Kim, J.-U., & Yu, E.-S. (2026). *Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems*. Graduation research project, Department of Data Science, Hanyang University.
+> Kim, J.-U., & Yu, E. (2026). *Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems*. Graduation research project, Department of Data Science, Hanyang University.

@@ -268,4 +268,4 @@ python -X utf8 tests/smoke_e2e.py --workdir "$env:TEMP/movielens-smoke-$([guid]:
 
 본 소프트웨어나 연구를 활용하는 경우 [CITATION.cff](CITATION.cff) 또는 GitHub의 “Cite this repository”를 참고하여 인용해 주기 바란다.
 
-> Kim, J.-U., & Yu, E.-S. (2026). *Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems*. Graduation research project, Department of Data Science, Hanyang University.
+> Kim, J.-U., & Yu, E. (2026). *Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems*. Graduation research project, Department of Data Science, Hanyang University.

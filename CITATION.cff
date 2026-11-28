@@ -7,7 +7,7 @@ authors:
     given-names: Jin-Uk
     affiliation: "Department of Data Science, Hanyang University"
   - family-names: Yu
-    given-names: Eun-seon
+    given-names: EunSeon
     affiliation: "Department of Data Science, Hanyang University"
 repository-code: "https://github.com/HK1DS/Evaluating-LLM-Derived-Intent-Metadata-and-Recency-in-Recommender-Systems"
 url: "https://github.com/HK1DS/Evaluating-LLM-Derived-Intent-Metadata-and-Recency-in-Recommender-Systems"
