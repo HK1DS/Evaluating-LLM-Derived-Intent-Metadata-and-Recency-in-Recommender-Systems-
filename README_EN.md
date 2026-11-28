@@ -1,40 +1,88 @@
 # Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems
 
-[한국어](README.md) | [English](README_EN.md)
+**Recency for Accuracy, Metadata for the Long Tail**
+
+[한국어](README.md) | [English](README_EN.md) | [Final report (PDF)](Evaluating%20LLM-Derived%20Intent%2C%20Metadata%2C%20and%20Recency%20in%20Recommender%20Systems.pdf) | [Research poster (PDF)](Kim_Yoo_Evaluating_LLM.pdf)
 
 `Python 3.11` · `PyTorch` · `RecBole` · `LLM / RAG` · `Knowledge Graph`
 
-A graduation research project in Data Science at Hanyang University. We investigate how additional signals affect collaborative filtering (CF) on Goodreads Children and MovieLens 25M, focusing on ranking accuracy, long-tail recommendation, and differences across users. This repository packages both experiments into a unified codebase with reproduction instructions.
+Graduation research project, Department of Data Science, Hanyang University (2026) — Jin-Uk Kim and Eun-seon Yoo; project advisor: Hyun-Joon Kim.
+
+We evaluate recency, item metadata, and LLM-derived intent as auxiliary signals for collaborative filtering (CF) on MovieLens 25M and Goodreads Children. **The proposed model is MF + Recency, which reuses the existing MF item embeddings and introduces just one trainable scalar.** Metadata and LLM intent are evaluated separately through ablations.
 
 ## 1. Motivation and research questions
 
-Exploratory analysis suggested that attribute preferences, such as authors or brands, can persist even when the dominant category or genre changes between consecutive interactions. Motivated by this observation, we investigate how recommendation models can represent evolving interests alongside persistent preferences.
+Exploratory analysis of Amazon Clothing, MovieLens, and Goodreads found that consecutive items can retain attributes even when their primary categories change. Brand, series, and author retention exceeded the chance expectation by factors of 6.5, 3.8, and 16.4, respectively. These observations do not by themselves guarantee gains over an already-trained CF model. Amazon Clothing is used only for behavioral analysis.
 
-- Does combining item metadata and recency improve CF baselines?
-- Does LLM-derived intent provide incremental value beyond metadata and recency?
-- How do the effects vary across user activity levels, and what trade-offs arise between accuracy and long-tail recommendation?
+- Does time-weighted recent history improve ranking accuracy over static CF?
+- Does a metadata KG help retrieve relevant long-tail items independently of overall accuracy?
+- How do the signals interact, what incremental value does LLM intent provide, and how do effects differ by user activity?
 
-## 2. Key findings
+## 2. Final experimental results
 
-Selected results from the November 19, 2026 experiment report. Values are test NDCG@10 under the per-user chronological split (TO), averaged over three seeds.
+Based on Tables 8–13 of the final report. Values are test results under the per-user chronological split (TO), averaged over three seeds (2020, 2021, 2022).
 
-| Model | MovieLens 25M | Goodreads Children |
-|---|---:|---:|
-| MF (KG-off) | 0.0876 | 0.0811 |
-| BPR | 0.0877 | 0.0818 |
-| LightGCN | 0.0848 | 0.0878 |
-| MF + Meta KG + Recency | 0.0892 | 0.0849 |
-| MF + Meta KG + Recency + Intent | 0.0893 | 0.0845 |
-| LightGCN + Meta KG + Recency | 0.0883 | 0.0864 |
+### 2.1 Proposed model versus baselines
 
-- **Metadata + recency:** relative NDCG@10 improvements over MF were **+1.8%** on MovieLens and **+4.7%** on Goodreads.
-- **LLM intent:** incremental gains were inconsistent. The small increase for MovieLens MF was not significant in the reported paired test, and performance decreased for Goodreads MF.
-- **Long-tail trade-off:** on Goodreads, augmenting LightGCN with metadata and recency increased Tail Recall@10 from 0.0100 to 0.0154, while NDCG@10 decreased from 0.0878 to 0.0864.
-- **User heterogeneity:** on Goodreads, additional signals tended to benefit less-active users and hurt more-active users. This is not established as a general pattern across datasets.
+| Model | MovieLens NDCG@10 | MovieLens Recall@10 | Goodreads NDCG@10 | Goodreads Recall@10 |
+|---|---:|---:|---:|---:|
+| BPR | 0.0877 | 0.0636 | 0.0818 | 0.0875 |
+| LightGCN | 0.0848 | 0.0595 | 0.0878 | 0.0908 |
+| MF | 0.0876 | 0.0636 | 0.0811 | 0.0870 |
+| **MF + Recency (proposed)** | **0.0898** | **0.0655** | **0.0913** | **0.0962** |
 
-These are selected historical reported results, not a new run of the public package. The joint effect of metadata and recency should not be confused with separate channel-level ablations.
+Relative NDCG@10 gains over MF are **+2.5%** on MovieLens and **+12.5%** on Goodreads. Paired user-level bootstrap 95% CIs for absolute differences are [+0.0019, +0.0025] and [+0.0095, +0.0108], respectively. Comparisons across backbones remain subject to the common training budget and differences in some execution environments.
+
+### 2.2 MF component ablations
+
+| Model | ML NDCG@10 | ML Tail R@10 | ML Cov@10 | GR NDCG@10 | GR Tail R@10 | GR Cov@10 |
+|---|---:|---:|---:|---:|---:|---:|
+| MF | 0.0876 | 0.0023 | 0.450 | 0.0811 | 0.0111 | 0.502 |
+| + Metadata KG | 0.0867 | **0.0031** | **0.510** | 0.0819 | 0.0127 | **0.562** |
+| + Recency (proposed) | **0.0898** | 0.0020 | 0.398 | **0.0913** | 0.0110 | 0.405 |
+| + KG + Recency | 0.0892 | 0.0022 | 0.413 | 0.0849 | 0.0128 | 0.451 |
+| + KG + Recency + LLM Intent | 0.0893 | 0.0021 | 0.410 | 0.0845 | **0.0132** | 0.466 |
+
+- **Recency:** improves accuracy in both domains but reduces Coverage@10.
+- **Metadata KG:** alone increases Tail Recall@10 over MF by approximately 35% on MovieLens and 14% on Goodreads, while also increasing coverage.
+- **Non-additive fusion:** KG + Recency yields approximately 0.7% lower NDCG@10 on MovieLens and 7.0% lower on Goodreads than Recency alone. Independent gains do not transfer additively to the combined model.
+- **LLM intent:** no confirmed incremental accuracy gain under fixed projection and additive fusion. The small MovieLens MF improvement is not statistically significant, and Goodreads MF accuracy decreases. This does not establish that all LLM-based recommendation approaches are ineffective.
+
+### 2.3 User activity and long-tail analysis
+
+Users are divided into quintiles by training interaction counts (Q1: least active; Q5: most active).
+
+| MF + Recency compared with | Q1 | Q2 | Q3 | Q4 | Q5 |
+|---|---:|---:|---:|---:|---:|
+| MovieLens MF | +2.7% | +3.2% | +3.5% | +3.2% | +1.5% |
+| Goodreads MF | +15.0% | +14.1% | +13.5% | +8.7% | +8.5% |
+| Goodreads LightGCN | +10.4% | +8.8% | +5.9% | −1.0% | −9.6% |
+
+On Goodreads, adding KG alone to MF benefits lower-activity users (Q1–Q2) and hurts higher-activity users (Q4–Q5), but the pattern is not established across both domains. Activity-level tests are not adjusted for multiple comparisons.
+
+On Goodreads, LightGCN + KG + Recency increases Tail Recall@10 from 0.0100 to 0.0154 and coverage from 0.285 to 0.458 relative to LightGCN, while NDCG@10 decreases from 0.0878 to 0.0864. Compared with popularity-penalized LightGCN (Tail Recall 0.0146, NDCG 0.0811), it achieves higher accuracy at comparable tail recall but lower coverage. Because the comparison changes both KG and recency, the difference cannot be attributed to KG alone.
+
+**Conclusion:** ranking accuracy and relevant long-tail item retrieval should be evaluated as distinct objectives. Score-level fusion and user-dependent selection of recency/metadata are future research directions, not validated methods in this study.
+
+These are historical results reported in the final report, not a new run of the public package.
 
 ## 3. Model and pipeline
+
+### 3.1 Proposed model: MF + Recency
+
+Use up to 50 recent training interactions and a fixed decay constant of 180 days, measured relative to the last training interaction. Compute a time-decayed weighted average of existing item embeddings.
+
+$$
+w_{uj}=\frac{\exp(-(t_u^{\mathrm{last}}-t_{uj})/\tau)}{\sum_{k\in H_u}\exp(-(t_u^{\mathrm{last}}-t_{uk})/\tau)},\qquad d_u=\sum_{j\in H_u}w_{uj}q_j
+$$
+
+$$
+s(u,i)=(p_u+\alpha_d d_u)^\top q_i=p_u^\top q_i+\alpha_d\sum_{j\in H_u}w_{uj}q_j^\top q_i
+$$
+
+Here $p_u$ and $q_i$ are MF user/item embeddings, $H_u$ is recent training history, and $\alpha_d$ is one trainable scalar with an unconstrained sign. The model augments the original CF score with time-weighted item–item inner products, without requiring LLM calls or a KG.
+
+### 3.2 Shared experimental pipeline
 
 ```mermaid
 flowchart TD
@@ -61,12 +109,12 @@ flowchart TD
 
 | Component | Role |
 |---|---|
-| MF / BPR / LightGCN | Collaborative filtering baselines; augmented variants use MF or LightGCN backbones. |
-| Metadata KG | Represents book attributes in Goodreads and movie genres in MovieLens as graph relations. |
+| MF / BPR / LightGCN | CF baselines; augmented variants use MF or LightGCN backbones. |
+| Metadata KG | Represents Goodreads book attributes and MovieLens genres as graph relations. |
 | Recency | Represents recent training interactions using time-decayed weights. |
 | LLM Intent KG | Extracts intents from user/item profiles, retrieves candidates using embeddings, and builds a graph after LLM selection. |
 
-The main comparison includes seven models: MF, BPR, LightGCN, and two augmented variants per MF/LightGCN backbone (metadata + recency, with or without intent). Dedicated ablation runners support channel-level analysis.
+The default runner compares seven models: MF, BPR, LightGCN, and two augmented variants per MF/LightGCN backbone (metadata + recency, with or without intent). The standalone MF + KG and MF + Recency variants are evaluated using the channel ablation runners in Section 6.4.
 
 ## 4. Datasets and evaluation protocol
 
@@ -75,16 +123,17 @@ The main comparison includes seven models: MF, BPR, LightGCN, and two augmented 
 | [Goodreads Children](https://cseweb.ucsd.edu/~jmcauley/datasets/goodreads.html) | 62,142 | 27,975 | 6,237,437 |
 | [MovieLens 25M](https://grouplens.org/datasets/movielens/25m/) | 133,684 | 15,785 | 24,046,865 |
 
-- **TO:** per-user chronological train/validation/test split (80/10/10), primary comparison for both datasets.
-- **TO_GLOBAL:** global chronological split (70/10/20), additionally evaluated on MovieLens, with a warm-user-only report.
-- **Shared settings:** 64-dimensional embeddings, up to 40 epochs, seeds 2020, 2021, and 2022; early stopping on validation NDCG@10.
-- **Evaluation:** full-sort ranking, NDCG, Recall, Hit, Tail Recall, Coverage, and user activity/item popularity slices. User-level paired bootstrap and Wilcoxon tests support statistical comparison.
-- **Leakage prevention:** user profiles, recency, activity and popularity statistics use training interactions only. Profile provenance is checked against the actual training split.
+- TO: per-user chronological 80/10/10. TO_GLOBAL: global chronological 70/10/20 (additional MovieLens evaluation, including warm users).
+- Shared settings: 64-dimensional embeddings, Adam (lr 0.001, L2 1e-6), up to 40 epochs, seeds 2020, 2021, 2022; early stopping on validation NDCG@10. Batch sizes: MovieLens 8192, Goodreads 2048.
+- Full-sort evaluation: NDCG@10 (ranking accuracy), Recall@10, Tail Recall@10 (recall for relevant items in the bottom 80% of training popularity, among users with such targets), Coverage@10 (fraction of the catalog appearing in the recommendation lists). User-level paired bootstrap and Wilcoxon tests.
+- User profiles, recency, activity and popularity statistics use training interactions only. See Section 8 for global temporal leakage and catalog timestamp limitations.
 
 ## 5. Repository structure
 
 ```text
 .
+├── README.md
+├── README_EN.md
 ├── reproduce.py
 ├── requirements.txt
 ├── experiments/
@@ -126,7 +175,7 @@ python reproduce.py goodreads prepare
 python reproduce.py movielens prepare
 ```
 
-Replace `prepare` with `download` to download only. The runner verifies file sizes and SHA-256 checksums and reuses existing originals. Goodreads interaction, book and author JSON.gz files are stored in `experiments/goodreads/`; MovieLens CSVs are stored in `experiments/movielens/raw/ml-25m/`. [MovieLens checksum source](https://raw.githubusercontent.com/tensorflow/datasets/master/tensorflow_datasets/url_checksums/movielens.txt).
+Replace `prepare` with `download` to download only. The runner verifies file sizes and SHA-256 checksums and reuses existing originals. Goodreads JSON.gz files are stored in `experiments/goodreads/`; MovieLens CSVs are stored in `experiments/movielens/raw/ml-25m/`. [MovieLens checksum source](https://raw.githubusercontent.com/tensorflow/datasets/master/tensorflow_datasets/url_checksums/movielens.txt).
 
 ### 6.2 Run the full experiments
 
@@ -138,7 +187,7 @@ python reproduce.py movielens run --split TO
 python reproduce.py movielens run --split TO_GLOBAL
 ```
 
-The runner reuses completed stages and valid caches. Review the estimated calls and costs and confirm with `y` before the connectivity check and full calls. `--max-usd 50` blocks runs whose upper cost estimate exceeds USD 50; it is not a hard billing cap. Configure billing limits with the provider. Use `--seeds 2020` for a single seed. The first RAG run downloads the encoder from Hugging Face.
+The runner reuses completed stages and valid caches. Review estimated calls and costs and confirm with `y` before the connectivity check and full calls. `--max-usd 50` blocks runs whose upper cost estimate exceeds USD 50; it is not a hard billing cap. Configure billing limits with the provider. Use `--seeds 2020` for a single seed. The first RAG run downloads the encoder from Hugging Face.
 
 | Stage | Processing | Main outputs |
 |---|---|---|
@@ -163,7 +212,7 @@ python experiments/movielens/scripts/unpack_data_bundle.py --split TO_GLOBAL
 python reproduce.py movielens evaluate --split TO_GLOBAL
 ```
 
-If stage D is already complete, run `evaluate` directly. The original Goodreads report's LightGCN+intent result used seed 2020, whereas the unified runner defaults to three seeds. MovieLens reported seven models × three seeds per split.
+If stage D is already complete, run `evaluate` directly. The supplementary Goodreads LightGCN+intent result used seed 2020, whereas the unified runner defaults to three seeds.
 
 ### 6.4 Ablation and user-level analysis
 
@@ -181,7 +230,7 @@ python scripts/analyze_activity_ablation.py pair --label "MovieLens MF" --off_di
 
 ## 7. Tests
 
-Use separate Python processes because experiment-specific modules share import names. Smoke tests use synthetic data, a mock API and a mock encoder, and are designed to check temporal splits, training, evaluation, cache resumption and leakage prevention. The smoke tests reset their work directory, so specify a fresh temporary path.
+Use separate Python processes because experiment-specific modules share import names. Smoke tests use synthetic data, a mock API and a mock encoder, and check temporal splits, training, evaluation, cache resumption and leakage prevention. Specify a fresh temporary path because the smoke tests reset their working directory.
 
 ```powershell
 $env:PYTHONUTF8 = "1"
@@ -194,11 +243,13 @@ python -m pytest -q tests
 python -X utf8 tests/smoke_e2e.py --workdir "$env:TEMP/movielens-smoke-$([guid]::NewGuid())"
 ```
 
-## 8. Limitations and public release scope
+## 8. Limitations and future work
 
-- Results cover two domains and 30-core-filtered interactions, not all recommendation settings or strict cold-start scenarios.
-- LLM-derived intent is an estimate rather than observed ground-truth intent and is subject to API cost, response variability, and generic-intent noise.
-- Accuracy, long-tail performance and coverage do not always improve together. Further validation of user-specific effects is needed.
+- Results cover two 30-core-filtered domains and static CF baselines, not sequential models such as SASRec or strict cold-start scenarios.
+- Per-user chronological splitting does not guarantee global chronological order. In the MovieLens global split warm-user evaluation, KG + Recency differs from MF by −0.4% (95% CI [−0.0037, +0.0018] for absolute NDCG difference); Recency alone was not evaluated under that split. Goodreads shelf tags reflect catalog information accumulated up to collection time.
+- Some baselines are still improving near the common 40-epoch budget; GPU hardware and evaluation batch sizes differ across some backbones. Uniform history averaging, history-length/decay sensitivity, and a full 2×2 LightGCN ablation remain to be evaluated.
+- LLM intent experiments are limited to one extractor, fixed projection, and additive fusion; the supplementary Goodreads LightGCN + intent comparison uses one seed.
+- Activity-level multiple-comparison adjustment, score-level fusion, user-dependent selection, and online evaluation remain future work. Observed accuracy/long-tail Pareto frontiers are limited to the reported mean values.
 
 ## 9. Resources and provenance
 
