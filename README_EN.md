@@ -2,7 +2,7 @@
 
 **Recency for Accuracy, Metadata for the Long Tail**
 
-[한국어](README.md) | [English](README_EN.md) | [Final report (PDF)](Evaluating%20LLM-Derived%20Intent%2C%20Metadata%2C%20and%20Recency%20in%20Recommender%20Systems.pdf) | [Research poster (PDF)](Kim_Yoo_Evaluating_LLM.pdf)
+[한국어](README.md) | [English](README_EN.md) | [Final report (PDF)](Evaluating%20LLM-Derived%20Intent%2C%20Metadata%2C%20and%20Recency%20in%20Recommender%20Systems.pdf) | [Research poster (PDF)](Kim_Yu_Evaluating_LLM.pdf)
 
 `Python 3.11` · `PyTorch` · `RecBole` · `LLM / RAG` · `Knowledge Graph`
 
