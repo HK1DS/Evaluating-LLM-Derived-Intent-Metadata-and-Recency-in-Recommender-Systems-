@@ -6,7 +6,7 @@
 
 `Python 3.11` · `PyTorch` · `RecBole` · `LLM / RAG` · `Knowledge Graph`
 
-Graduation research project, Department of Data Science, Hanyang University (2026) — Jin-Uk Kim and Eun-seon Yoo; project advisor: Hyun-Joon Kim.
+Graduation research project, Department of Data Science, Hanyang University (2026) — Jin-Uk Kim and Eun-seon Yu; project advisor: Hyun-Joon Kim.
 
 We evaluate recency, item metadata, and LLM-derived intent as auxiliary signals for collaborative filtering (CF) on MovieLens 25M and Goodreads Children. **The proposed model is MF + Recency, which reuses the existing MF item embeddings and introduces just one trainable scalar.** Metadata and LLM intent are evaluated separately through ablations.
 
@@ -86,24 +86,24 @@ Here $p_u$ and $q_i$ are MF user/item embeddings, $H_u$ is recent training histo
 
 ```mermaid
 flowchart TD
-    A[User-item interactions] --> B[30-core filtering and temporal split]
-    B --> C[Training interactions only]
-    C --> D[MF / LightGCN backbone]
-    C --> E[Recent interactions and time decay]
+    A[User-item<br/>interactions] --> B[30-core<br/>filtering and<br/>temporal split]
+    B --> C[Training<br/>interactions<br/>only]
+    C --> D[MF / LightGCN<br/>backbone]
+    C --> E[Recent<br/>interactions<br/>and time decay]
     C --> F[User profiles]
-    G[Item metadata] --> H[Metadata knowledge graph]
+    G[Item metadata] --> H[Metadata<br/>knowledge<br/>graph]
     G --> I[Item profiles]
-    F --> J[LLM intent extraction]
+    F --> J[LLM intent<br/>extraction]
     I --> J
-    J --> K[Embedding retrieval and intent selection]
-    K --> L[Intent knowledge graph]
-    D --> M[Configurable recommendation model]
+    J --> K[Embedding<br/>retrieval and<br/>intent selection]
+    K --> L[Intent<br/>knowledge<br/>graph]
+    D --> M[Configurable<br/>recommendation<br/>model]
     E --> M
     H --> M
     L --> M
     M --> N[Full-sort ranking]
     B --> O[Validation / test]
-    N --> P[Accuracy, tail recall, coverage and user slices]
+    N --> P[Accuracy,<br/>tail recall,<br/>coverage and<br/>user slices]
     O --> P
 ```
 
@@ -267,4 +267,4 @@ python -X utf8 tests/smoke_e2e.py --workdir "$env:TEMP/movielens-smoke-$([guid]:
 
 If you use this software or research, please cite the project using [CITATION.cff](CITATION.cff) or GitHub's “Cite this repository” feature.
 
-> Kim, J.-U., & Yoo, E.-S. (2026). *Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems*. Graduation research project, Department of Data Science, Hanyang University.
+> Kim, J.-U., & Yu, E.-S. (2026). *Evaluating LLM-Derived Intent, Metadata, and Recency in Recommender Systems*. Graduation research project, Department of Data Science, Hanyang University.
