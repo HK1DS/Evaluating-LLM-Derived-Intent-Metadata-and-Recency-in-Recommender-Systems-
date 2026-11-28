@@ -3,7 +3,7 @@
 **Recency for Accuracy, Metadata for the Long Tail**  
 최근성은 추천 정확도를, 메타데이터는 롱테일 아이템 검색을 개선한다.
 
-[한국어](README.md) | [English](README_EN.md) | [최종 보고서 (PDF)](Evaluating%20LLM-Derived%20Intent%2C%20Metadata%2C%20and%20Recency%20in%20Recommender%20Systems.pdf) | [연구 포스터 (PDF)](Kim_Yoo_Evaluating_LLM.pdf)
+[한국어](README.md) | [English](README_EN.md) | [최종 보고서 (PDF)](Evaluating%20LLM-Derived%20Intent%2C%20Metadata%2C%20and%20Recency%20in%20Recommender%20Systems.pdf) | [연구 포스터 (PDF)](Kim_Yu_Evaluating_LLM.pdf)
 
 `Python 3.11` · `PyTorch` · `RecBole` · `LLM / RAG` · `Knowledge Graph`
 
